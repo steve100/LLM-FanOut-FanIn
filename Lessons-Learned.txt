@@ -60,5 +60,15 @@ Sections 2-6 below are independent research tasks (weather, lunar data, religiou
     We count more and more on the installed tools
     An LLM usually doesn't do api calls or scrape web pages.
 
+13. Claude Co-work runs in a vm
+    Claude code runs natively
+
+14. On Linux and Windows my pattern begain to be
+    1. claude code to run 
+    2. VS code to edit
+    3. gui to ask questions either from Claude or ChatGPT
+    
+15. I did run out of tokens using sonnet and haiku for a 6 hr session.
+
 
 
