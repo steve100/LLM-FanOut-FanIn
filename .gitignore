@@ -1,0 +1,53 @@
+# --- Python & UV project ignores ---
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments (created by uv or venv)
+.venv/
+venv/
+env/
+ENV/
+.uv/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+.installed.cfg
+
+# UV lock/cache files
+.uv-lock.json
+.uv-cache/
+.uv-envs/
+
+# Jupyter / notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Output files
+*.csv
+*.xlsx
+*.json
+*.html
+*.zip
+*.pdf
+
+# Project-specific exports
+list-extracted.csv
