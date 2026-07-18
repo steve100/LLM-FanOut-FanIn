@@ -4,9 +4,11 @@
 It demonstrates the Fan-out, do many things, fan-in, collect the results, pattern using LLMs and Python.
 
 ### Project Presentations
- ai-concurrency-infographic-v3.html                
+```
+ ai-concurrency-infographic-v3.html              
  ai-concurrency-infographic-v3.pdf 
  concurrency.pdf 
+```
 
 ### Lessons-Learned
  List of thing learned while creating this project.
