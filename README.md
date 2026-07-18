@@ -1,5 +1,8 @@
 # LLM-FanOut-FanIn
 
+### Reason for this project 
+It demonstrates the Fan-out, do many things, fan-in, collect the results, pattern using LLMs and Python.
+
 ### Project Presentations
  ai-concurrency-infographic-v3.html                
  ai-concurrency-infographic-v3.pdf 
