@@ -7,6 +7,9 @@ It demonstrates the Fan-out, do many things, fan-in, collect the results, patter
  ai-concurrency-infographic-v3.html                
  ai-concurrency-infographic-v3.pdf 
 
+### Lessons-Learned
+ List of thing learned while creating this project.
+
 ### Pull down the code from GitHub
 ```
 The easist way is to use the git command line tool.  
