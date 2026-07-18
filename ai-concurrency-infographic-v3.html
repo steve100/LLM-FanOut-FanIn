@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Concurrency: Fan-Out / Fan-In</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 64px 32px;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 400px, #f4f6f8 400px);
+    color: #1d1d1f;
+    font-size: 21px;
+  }
+  .sheet {
+    max-width: 1500px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  }
+  .hero {
+    background: linear-gradient(135deg, #0f172a, #1e3a5f 60%, #2b6cb0);
+    color: #fff;
+    padding: 68px 74px 56px;
+    text-align: center;
+  }
+  .hero .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.78em;
+    color: #93c5fd;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    margin: 0 0 12px;
+    font-size: 2.1em;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .hero p {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 1.02em;
+    line-height: 1.6;
+    color: #dbeafe;
+  }
+
+  .section {
+    padding: 64px 74px;
+  }
+  .section + .section {
+    border-top: 1px solid #edf0f3;
+  }
+  .section h2 {
+    font-size: 0.82em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #2b6cb0;
+    font-weight: 700;
+    margin: 0 0 24px;
+  }
+
+  /* Diagram */
+  .diagram-caption {
+    text-align: center;
+    color: #667085;
+    font-size: 0.92em;
+    margin-top: 12px;
+  }
+  .diagram-wrap { display: flex; justify-content: center; }
+
+  .stack-label {
+    text-align: center;
+    font-size: 0.72em;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    color: #9aa5b1;
+    margin: 26px 0 10px;
+  }
+
+  /* Stats */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .stat {
+    background: #f8fafc;
+    border: 1px solid #eaeef2;
+    border-radius: 12px;
+    padding: 32px 22px;
+    text-align: center;
+  }
+  .stat .num {
+    font-size: 1.9em;
+    font-weight: 800;
+    color: #1e3a5f;
+    line-height: 1;
+  }
+  .stat .lbl {
+    margin-top: 12px;
+    font-size: 0.82em;
+    color: #667085;
+    line-height: 1.35;
+  }
+  .stats-foot {
+    margin-top: 20px;
+    text-align: center;
+    color: #667085;
+    font-size: 0.9em;
+  }
+
+  /* Cost table */
+  .cost-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .model-card {
+    border-radius: 14px;
+    padding: 34px 34px 32px;
+    border: 1px solid #eaeef2;
+  }
+  .model-card.sonnet { background: linear-gradient(180deg, #eff6ff, #ffffff); border-color: #dbeafe; }
+  .model-card.haiku { background: linear-gradient(180deg, #f0fdf4, #ffffff); border-color: #dcfce7; }
+  .model-card h3 {
+    margin: 0 0 6px;
+    font-size: 1.15em;
+    color: #14213d;
+  }
+  .model-card .price {
+    font-size: 0.82em;
+    color: #667085;
+    margin-bottom: 22px;
+  }
+  .rowline {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e5e9ee;
+  }
+  .rowline:last-of-type { border-bottom: none; }
+  .rowline .k { color: #556; }
+  .rowline .v { font-weight: 600; color: #14213d; }
+  .total {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #dfe4ea;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .total .k { font-weight: 700; color: #14213d; }
+  .total .v { font-weight: 800; font-size: 1.35em; }
+  .sonnet .total .v { color: #2b6cb0; }
+  .haiku .total .v { color: #16a34a; }
+  .price-note {
+    grid-column: 1 / -1;
+    font-size: 0.78em;
+    color: #98a2b3;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* Takeaway */
+  .takeaway {
+    background: #14213d;
+    color: #eef2ff;
+    border-radius: 14px;
+    padding: 40px 44px;
+    font-size: 1.02em;
+    line-height: 1.6;
+  }
+  .takeaway strong { color: #93c5fd; }
+
+  footer {
+    padding: 40px 74px 50px;
+    text-align: center;
+    background: #0f172a;
+    color: #cbd5e1;
+  }
+  footer .name {
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+  footer .site {
+    color: #93c5fd;
+    font-weight: 600;
+  }
+  footer .divider {
+    display: inline-block;
+    margin: 0 10px;
+    color: #475569;
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <div class="hero">
+    <div class="eyebrow">How the daily brief actually runs</div>
+    <h1>AI Concurrency: Fan-Out / Fan-In</h1>
+    <p>One prompt splits into several independent research tasks that run in parallel, then the results funnel back into a single composed answer — written to a file and pushed to the web.</p>
+  </div>
+
+  <div class="section">
+    <h2>The Pattern</h2>
+    <div class="diagram-wrap">
+<svg width="1254" height="576" viewBox="0 0 784 360" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"></path>
+    </marker>
+  </defs>
+
+  <!-- Prompt node -->
+  <rect x="317" y="8" width="150" height="46" rx="10" fill="#14213d"></rect>
+  <text x="392" y="36" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Your Prompt</text>
+
+  <!-- Fan-out lines -->
+  <line x1="392" y1="54" x2="88" y2="118" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <line x1="392" y1="54" x2="240" y2="118" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <line x1="392" y1="54" x2="392" y2="118" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <line x1="392" y1="54" x2="544" y2="118" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <line x1="392" y1="54" x2="696" y2="118" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+
+  <!-- 5 parallel task nodes -->
+  <g>
+    <rect x="20" y="120" width="136" height="56" rx="10" fill="#eff6ff" stroke="#bfdbfe"></rect>
+    <text x="88" y="143" text-anchor="middle" fill="#1e3a5f" font-size="12" font-weight="700" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Weather</text>
+    <text x="88" y="160" text-anchor="middle" fill="#64748b" font-size="10.5" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">search + fetch</text>
+  </g>
+  <g>
+    <rect x="172" y="120" width="136" height="56" rx="10" fill="#eff6ff" stroke="#bfdbfe"></rect>
+    <text x="240" y="143" text-anchor="middle" fill="#1e3a5f" font-size="12" font-weight="700" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Lunar Data</text>
+    <text x="240" y="160" text-anchor="middle" fill="#64748b" font-size="10.5" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">calc + search</text>
+  </g>
+  <g>
+    <rect x="324" y="120" width="136" height="56" rx="10" fill="#eff6ff" stroke="#bfdbfe"></rect>
+    <text x="392" y="143" text-anchor="middle" fill="#1e3a5f" font-size="12" font-weight="700" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Calendar</text>
+    <text x="392" y="160" text-anchor="middle" fill="#64748b" font-size="10.5" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">search</text>
+  </g>
+  <g>
+    <rect x="476" y="120" width="136" height="56" rx="10" fill="#eff6ff" stroke="#bfdbfe"></rect>
+    <text x="544" y="143" text-anchor="middle" fill="#1e3a5f" font-size="12" font-weight="700" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">News</text>
+    <text x="544" y="160" text-anchor="middle" fill="#64748b" font-size="10.5" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">9 searches</text>
+  </g>
+  <g>
+    <rect x="628" y="120" width="136" height="56" rx="10" fill="#eff6ff" stroke="#bfdbfe"></rect>
+    <text x="696" y="143" text-anchor="middle" fill="#1e3a5f" font-size="12" font-weight="700" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Tech</text>
+    <text x="696" y="160" text-anchor="middle" fill="#64748b" font-size="10.5" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">quick tip</text>
+  </g>
+
+  <!-- Fan-in lines -->
+  <line x1="88" y1="176" x2="352" y2="236" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <line x1="240" y1="176" x2="372" y2="236" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <line x1="392" y1="176" x2="392" y2="236" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <line x1="544" y1="176" x2="412" y2="236" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <line x1="696" y1="176" x2="432" y2="236" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+
+  <!-- Compose node -->
+  <rect x="292" y="238" width="200" height="50" rx="10" fill="#2b6cb0"></rect>
+  <text x="392" y="268" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Compose &amp; Write HTML</text>
+
+  <!-- to website -->
+  <line x1="392" y1="288" x2="392" y2="318" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"></line>
+  <rect x="292" y="320" width="200" height="36" rx="18" fill="#16a34a"></rect>
+  <text x="392" y="343" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">Pushed to wolfeservices.biz</text>
+</svg>
+    </div>
+    <p class="diagram-caption">Fan-out: five independent tasks launch in one batch. Fan-in: results are gathered once, composed in order, and written out.</p>
+  </div>
+
+  <div class="section">
+    <h2>The Task, By The Numbers</h2>
+    <div class="stats">
+      <div class="stat"><div class="num">9</div><div class="lbl">Web searches, issued concurrently</div></div>
+      <div class="stat"><div class="num">1</div><div class="lbl">Page fetch</div></div>
+      <div class="stat"><div class="num">~4</div><div class="lbl">Bash calls</div></div>
+      <div class="stat"><div class="num">8–10</div><div class="lbl">Back-and-forth turns</div></div>
+    </div>
+    <div class="stats-foot">Plus reading and writing the final HTML brief — all wrapped into one run.</div>
+  </div>
+
+  <div class="section">
+    <h2>What It Costs (July 2026 Token Pricing — Not Subscription Pricing)</h2>
+    <div class="cost-grid">
+      <div class="model-card sonnet">
+        <h3>Claude Sonnet 5</h3>
+        <div class="price">$2 / MTok in · $10 / MTok out (through Aug 31, 2026 — rising to $3 / $15)</div>
+        <div class="rowline"><span class="k">Input (cumulative, ~125K tok)</span><span class="v">≈ $0.25</span></div>
+        <div class="rowline"><span class="k">Output (~6K tok)</span><span class="v">≈ $0.06</span></div>
+        <div class="total"><span class="k">Total run</span><span class="v">$0.30 – $0.35</span></div>
+      </div>
+      <div class="model-card haiku">
+        <h3>Claude Haiku 4.5</h3>
+        <div class="price">$1 / MTok in · $5 / MTok out</div>
+        <div class="rowline"><span class="k">Input (cumulative, ~125K tok)</span><span class="v">≈ $0.125</span></div>
+        <div class="rowline"><span class="k">Output (~6K tok)</span><span class="v">≈ $0.03</span></div>
+        <div class="total"><span class="k">Total run</span><span class="v">$0.15 – $0.18</span></div>
+      </div>
+      <div class="price-note">Input tokens include the system prompt and tool schemas resent every turn — the biggest cost driver in a multi-turn agentic run.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Takeaway</h2>
+    <div class="takeaway">
+      Fan-out / fan-in isn't just faster — it's <strong>the same total work, done in parallel instead of in sequence</strong>. Instead of nine searches waiting on each other one at a time, they all run at once, and the model composes the final answer only after everything comes back. On a subscription, the marginal cost of a run like this is a fraction of a cent to a few tenths of a cent — and it's genuinely fun to watch all the tasks fire off together.
+    </div>
+  </div>
+
+  <footer>
+    <span class="name">Steve Wolfe</span>
+    <span class="divider">|</span>
+    <span class="site">wolfeservices.biz</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

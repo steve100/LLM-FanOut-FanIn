@@ -1,3 +1,51 @@
-Lessons Learned From this Project
+Lessons Learned From this Project LLM-FanOut-FanIn
+
+Reasons for the Project
+With my old prompt.md file
+Sonnet would run the sub-prompts concurrently without explictly stating it
+Haiku would usually not.
+
+This runs the independant research concurrently!  
+Sections 2-6 below are independent research tasks (weather, lunar data, religious calendar, news).
+ Gather them concurrently: issue all the needed searches/tool calls for these sections together in a batch rather than one at a time, then compose 
+ and print the sections in order once their data is ready. Use horizontal rules (---) to separate sections.
+
+
+1. Permissions
+   We are so used to the desktop gui or the code terminal gui asking what to do.
+
+2. Haiku output
+   Seemed different between Windows and Linux
+   I do not like the windows format but it is usuable
+   I could work on the prompt
+   I do like the more readable style
+
+3. Sonnet output  
+   Very serious Professional output
+
+4. I like having all three tools up
+   claude-desktop 
+   vscode
+   a terminal to run commands
+
+5. Old output  
+   Keeping it for now
+   I suspect it will need to be pruned
+
+6. The Presentations and the png were done in claude 
+   I wrote a Linked In post and asked claude sonnet to create some .html
+      html does not load to linked in.
+      png loads to linked in  It was too blurry   
+      pdf loads to linked in and worked
+
+7. Many iternations
+    What does it look like in both models
+    does the fan in and fan out work  
+    used the gui and also claude code
+    Really nice to see the fan in and fan out
+
+8.  The prompt needs fixing on windows to make the haiku page look better
+    It looks good enough.
+
 
 

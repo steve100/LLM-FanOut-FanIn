@@ -29,7 +29,7 @@ dist/
 .ipynb_checkpoints/
 
 # Logs and temporary files
-*.log
+#*.log
 *.tmp
 *.bak
 .DS_Store
@@ -45,9 +45,9 @@ Thumbs.db
 *.csv
 *.xlsx
 *.json
-*.html
+#*.html
 *.zip
-*.pdf
+#*.pdf
 
 # Project-specific exports
 list-extracted.csv

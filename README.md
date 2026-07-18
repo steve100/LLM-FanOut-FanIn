@@ -4,6 +4,15 @@
  ai-concurrency-infographic-v3.html                
  ai-concurrency-infographic-v3.pdf 
 
+### Pull down the code from GitHub
+```
+The easist way is to use the git command line tool.  
+See the green code button on any github project page. 
+
+git clone https://github.com/steve100/LLM-FanOut-FanIn.git
+
+```
+
 
 ### Use Case One - Use an LLM
 
@@ -108,4 +117,7 @@ dodailybrief.bat
 dodailybrief.sh
 morning-brief.md
 requirements.txt
+dailybrief-haiku-example.html
+dailybrief-sonnet-example.html
+
 ```

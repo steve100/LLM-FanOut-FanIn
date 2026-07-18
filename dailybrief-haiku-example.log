@@ -1,0 +1,25 @@
+Done! I've created your daily morning brief for July 17, 2026, and saved it to both:
+- **briefing-2026-07-17-0800.html** (timestamped version)
+- **dailybrief.html** (active copy)
+
+The briefing includes:
+
+1. **Header** - Date and greeting
+2. **Weather & Outlook** - Dangerously hot day (95-101°F heat index to 105°F), good air quality, sunrise/sunset times, activity recommendations, and 7-day forecast
+3. **Lunar Status** - Links to precise lunar data resources
+4. **News Digest** covering:
+   - AI News: Claude Sonnet 5, Gemini delay, AI Safety Index, Meta's $145B investment, China AI shutdown
+   - Global Security: Iran-US escalation, Kyiv attacks, Sudan drone strikes
+   - General News: Argentina World Cup final, Venezuela earthquakes, Spain-Gibraltar border
+   - Tech/DevOps: SpaceX Grok 4.5, Reflection AI compute deal, GPT-5.6 launch, Kimi K3, 8090 Labs funding
+5. **Tech Recommendation** - Python `functools.lru_cache` tip
+
+The HTML files are fully styled and ready to view in a browser.
+
+Sources:
+- [BuildFastWithAI](https://www.buildfastwithai.com/blogs/ai-news-today-july-15-2026)
+- [CNN](https://www.cnn.com/2026/07/16/world/live-news/iran-war-trump)
+- [NBC Sports](https://www.nbcnews.com/sports/soccer/live-blog/england-argentina-world-cup-2026-july-15-live-updates-rcna587325)
+- [TechCrunch](https://techcrunch.com/2026/06/22/spacex-inks-compute-deal-with-reflection-ai-an-open-source-ai-lab/)
+- [Weather.gov](https://forecast.weather.gov/)
+- [TimeandDate.com](https://www.timeanddate.com/)
