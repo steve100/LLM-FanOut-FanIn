@@ -47,5 +47,18 @@ Sections 2-6 below are independent research tasks (weather, lunar data, religiou
 8.  The prompt needs fixing on windows to make the haiku page look better
     It looks good enough.
 
+9.  ftp put works differently from windows and linux
+    I removed the ftp put from the prompt
+
+10. I did not want to use claude schedule.
+    On Linux I used a cronjob
+    On Windows I didn't bother.
+
+11. The prompt worked fine on Claude and ChatGPT
+
+12. Fronteer Models vs Local LLM  
+    We count more and more on the installed tools
+    An LLM usually doesn't do api calls or scrape web pages.
+
 
 
