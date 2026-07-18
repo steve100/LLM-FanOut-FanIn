@@ -6,14 +6,14 @@ Cross-platform morning brief generator for Windows, Linux, and macOS.
 Python 3.11+
 
 Install:
-    python -m pip install requests feedparser astral tzdata
+    python3 -m pip install requests feedparser astral tzdata
 
 Optional Google Calendar support:
-    python -m pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
+    python3 -m pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
 Run:
-    python briefsteve.py --no-calendar
-    python briefsteve.py --output morning-brief.md
+    python3 briefsteve.py --no-calendar
+    python3: briefsteve.py --output morning-brief.md
 """
 
 from __future__ import annotations

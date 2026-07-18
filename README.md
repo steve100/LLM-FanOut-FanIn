@@ -1,89 +1,111 @@
-# LinkedIn Extractor
+# LLM-FanOut-FanIn
 
-# Use Case
-## Pull from LinkedIn your contacts and create a .csv file as a database
-   - This does not violate any licencing.
-
-# Initial Steps
-## Access your LinkedIN profile's connections
-   - list them
-   - copy them to a word document.  a short example is small-list.docx
-
-## Running it as a prompt in ChatGPT
-   - "free" with your subscription or free plan
-   - Make a new chat
-   - paste the contents of Prompt-chatgpt.md into the window
-   - upload the .docx file
-   - push the run button
-
-## Running it as a GPT
-   - "free" with your subscription or free plan
-   - Create a GPT
-   - Put the contents of Prompt-chatgpt.md into the window
-   - update it
-   - publish it
-
-## Running it as an API using a language like Python
-   - About $0.30 for my list of 650 contacts using GPT-4o or GPT-5 (rounding)
-
-## Running it as a python program
-  -  "free"  You need a computer and you need to set it up.  See below
-  -  Gives an answer faster than ChatGPT
-  -  See run.bat
-  -  uv run linkedin-extract %1 -o list-extracted.csv
+### Project Presentations
+ ai-concurrency-infographic-v3.html                
+ ai-concurrency-infographic-v3.pdf 
 
 
-**Extract LinkedIn contact data from `.docx` files and export to CSV.**
+### Use Case One - Use an LLM
 
-This tool parses Word documents exported from LinkedIn connection lists (e.g., via profile save or contact exports) and extracts structured data including name, description, connection date, LinkedIn URL, picture URL, and message link.
-
----
-
-## 🚀 Features
-
-- Reads `.docx` files directly (no manual formatting required)
-- Extracts:
-  - **Name** — hyperlinked LinkedIn contact name  
-  - **Description** — text below the name (career summary, tagline, etc.)  
-  - **Connected On** — normalized ISO date (`YYYY-MM-DD`)  
-  - **LinkedIn URL** — main profile link  
-  - **LinkedIn Picture URL** — generated automatically from profile link (`/overlay/photo/`)  
-  - **Message URL** — hyperlink from the “Message” button  
-- Exports clean CSV with columns:
+Run claude code to create a daily briefing from a set of sources.  
+    The sources are in the briefing.md file.  The output is in dailybrief.log
 
 
-
----
-
-## 🧩 Installation
-
-### Option 1 — Run directly with [`uv`](https://github.com/astral-sh/uv)
+### Setup your virtual environment
 ```
-#see run-linkedin-extract.bat
-uv run linkedin-extract small-list.docx -o list-extracted.csv
-```
+cd to your directory and run the following commands
 
-### Option 2 — Manual setup
+Activate your virtual environment
+Linux:   source .venv/bin/activate
+windows: \.venv\Scripts\activate
 ```
-uv venv
-source .venv/bin/activate   # or .venv\Scripts\Activate.ps1 on Windows
-python extract_linkedin_docx.py small-list.docx -o list-extracted.csv
+### Setup your script to run the LLM
 ```
+Select the model you want to use.
+Edit dodailybrief.bat  || or dodailybrief.sh
+```
+###  Run the script
+```
+ The script will run claude code in batch mode using briefing.md 
+ It will create two html files and a log file.
+Linux:   ./dodailybrief.sh
+windows: dodailybrief.bat
 
-### 🧠 Example Output
 ```
-Name	Description	Connected On	LinkedIn URL	LinkedIn Picture URL	Message URL
-Mary Kay Wedel	Career Management Consultant | Helping Executives and Professionals accelerate career advancement, career change or career transition | LinkedIn Specialist | Resume Writer	2025-11-02	https://www.linkedin.com/in/marykaywedel
-	https://www.linkedin.com/in/marykaywedel/overlay/photo/
-	https://www.linkedin.com/messaging/thread/
+### Files created from the script   
+```
+   briefing-2026-07-17.html
+   dailybrief.html
+   dailybrief.log
 
-A CSV file named list-extracted.csv will be created in the current directory.
-```
-### Adding Dependencies
-```
-If your script grows to include libraries like pandas or python-docx, add them via:
-uv add pandas python-docx
 ```
 
 
-"# LLM-FanOut-FanIn" 
+### Use Case Two - Use Python to Create a Daily Briefing.
+This will be cheaper than using an LLM  and it will be more robust.
+
+
+```
+Setup your virtual environment
+cd to your directory and run the following commands
+
+activate your virtual environment
+Linux:   source .venv/bin/activate
+windows: \.venv\Scripts\activate
+
+```
+```
+run the Python script to create a daily briefing
+  do-python-briefsteve.bat 
+  or 
+
+Run:
+    python3 briefsteve.py --no-calendar --output morning-brief.md
+
+```
+
+### Initial Setup of the Python Virtual Environment
+```
+python -m venv .venv
+
+Choose your os
+
+Linux/macOS
+#source .venv/bin/activate
+
+Windows PowerShell
+ .venv\Scripts\Activate.ps1
+
+Windows Command Prompt
+ .venv\Scripts\activate.bat
+
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements.txt
+
+
+For Google Calendar, create an OAuth Desktop application in Google Cloud, enable the Calendar API, download the credentials as credentials.json, and run without --no-calendar. The first execution opens the OAuth authorization flow and stores a reusable token locally. This follows Google’s official command-line quickstart pattern.
+```
+
+### LMM-FanOut-FanIn files
+```
+LICENSE
+Lessons-Learned.txt
+README.md
+ai-concurrency-infographic-v3.html
+ai-concurrency-infographic-v3.pdf
+briefing-2026-07-17.html
+briefing-20260717-063000.html
+briefing.md
+briefingcopy.md
+briefsteve.py
+create-github-repo.bat
+dailybrief-haiku-example.html
+dailybrief-sonnet-example.html
+dailybrief.log
+do-activate.bat
+do-python-briefsteve.bat
+dodailybrief.bat
+dodailybrief.sh
+morning-brief.md
+requirements.txt
+```

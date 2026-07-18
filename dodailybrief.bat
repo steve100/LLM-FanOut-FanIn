@@ -1,6 +1,9 @@
 
 rem claude agent to fetch data and send to my website
 
+rem activate the Python virtual environment
+echo "run this: .venv\Scripts\activate"
+
 rem sonnet
 rem
 rem pick your home directory

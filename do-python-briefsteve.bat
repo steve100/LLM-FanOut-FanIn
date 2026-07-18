@@ -1,1 +1,1 @@
-python briefsteve.py --output morning-brief.md
+ python3 briefsteve.py --no-calendar --output morning-brief.md
