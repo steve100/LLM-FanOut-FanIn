@@ -6,6 +6,7 @@ It demonstrates the Fan-out, do many things, fan-in, collect the results, patter
 ### Project Presentations
  ai-concurrency-infographic-v3.html                
  ai-concurrency-infographic-v3.pdf 
+ concurrency.pdf 
 
 ### Lessons-Learned
  List of thing learned while creating this project.
@@ -108,6 +109,7 @@ Lessons-Learned.txt
 README.md
 ai-concurrency-infographic-v3.html
 ai-concurrency-infographic-v3.pdf
+concurrency.pdf 
 briefing-2026-07-17.html
 briefing-20260717-063000.html
 briefing.md
@@ -125,5 +127,7 @@ morning-brief.md
 requirements.txt
 dailybrief-haiku-example.html
 dailybrief-sonnet-example.html
+
+
 
 ```
